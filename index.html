@@ -31,9 +31,36 @@
       // 回呼 Unity 的 SetDeviceType 方法
       unityInstance.SendMessage("GMM", "SetDeviceType", deviceType);
     }
+
+    if (msg === "getData") {
+        FetchGoogleSheetAndSend();
+    }
   };
 
   let unityInstance = null; // 🔧 把變數拉到全域
+
+async function FetchGoogleSheetAndSend() {
+    try {
+        const url = "https://docs.google.com/spreadsheets/d/1bQCSs7qrM95m5Y0P8Zjhq0pTIckcTkNMAQfH2A7m_rU/export?format=csv";
+        const response = await fetch(url);
+        const text = await response.text();
+
+        // 拆成行
+        const rows = text.split("\n");
+        // 取第一行
+        const firstRow = rows[0].split(",");
+        // 取第一欄第一筆
+        const firstValue = firstRow[0];
+
+        //console.log("First Value:", firstValue);
+
+        // 傳給 Unity (假設 Unity 物件叫 "GameManager"，方法叫 "OnReceiveCSV")
+        unityInstance.SendMessage("GMM", "GetData", firstValue);
+
+    } catch (err) {
+        console.error("Fetch failed:", err);
+    }
+}
 
   function isMobile() {
     return /Android|iPhone|iPad|iPod|Mobile/i.test(navigator.userAgent);
