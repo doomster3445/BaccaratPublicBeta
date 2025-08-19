@@ -62,6 +62,19 @@ async function FetchGoogleSheetAndSend() {
     }
 }
 
+self.addEventListener('fetch', (event) => {
+  const url = new URL(event.request.url);
+
+  // 只攔截本地資源，不攔截 Google Docs 之類的外部網址
+  if (url.origin === location.origin) {
+    event.respondWith(
+      caches.match(event.request).then((response) => {
+        return response || fetch(event.request);
+      })
+    );
+  }
+});
+
   function isMobile() {
     return /Android|iPhone|iPad|iPod|Mobile/i.test(navigator.userAgent);
   }
