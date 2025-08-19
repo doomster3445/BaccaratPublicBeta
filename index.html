@@ -95,6 +95,22 @@ self.addEventListener('fetch', (event) => {
       //   }
       // });
 
+      self.addEventListener('fetch', event => {
+  const url = new URL(event.request.url);
+
+  // 如果是 google 的，就不要攔截
+  if (url.hostname.includes("docs.google.com")) {
+    return;
+  }
+
+  // 其他照舊
+  event.respondWith(
+    caches.match(event.request).then(response => {
+      return response || fetch(event.request);
+    })
+  );
+});
+
       var container = document.querySelector("#unity-container");
       var canvas = document.querySelector("#unity-canvas");
       var loadingBar = document.querySelector("#unity-loading-bar");
