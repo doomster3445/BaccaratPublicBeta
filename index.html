@@ -89,11 +89,11 @@ self.addEventListener('fetch', (event) => {
     }
   }
   
-      window.addEventListener("load", function () {
-        if ("serviceWorker" in navigator) {
-          navigator.serviceWorker.register("ServiceWorker.js");
-        }
-      });
+      // window.addEventListener("load", function () {
+      //   if ("serviceWorker" in navigator) {
+      //     navigator.serviceWorker.register("ServiceWorker.js");
+      //   }
+      // });
 
       var container = document.querySelector("#unity-container");
       var canvas = document.querySelector("#unity-canvas");
